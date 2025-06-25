@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Review the Song</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- reuse the exact same <style> block from submit_song.html -->
+</head>
+
+<body>
+
+  <header>
+    <div class="container">
+      <a href="/" class="logo">Cherry Hills Worship</a>
+      <nav>
+        <ul>
+          <li><a href="/">Submit Song</a></li>
+          <li><a href="/dashboard">Dashboard</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h2>Song Feedback</h2>
+    <form id="surveyForm">
+      <label for="reviewer">Your Name</label>
+      <input id="reviewer" type="text" required>
+
+      <label for="rating">Rating (1–5)</label>
+      <input id="rating" type="number" min="1" max="5" required>
+
+      <label for="comments">Comments</label>
+      <textarea id="comments" rows="4"></textarea>
+
+      <button type="submit">Submit Review</button>
+    </form>
+  </main>
+
+  <footer>
+    &copy; 2025 Cherry Hills Worship Team
+  </footer>
+
+  <script>
+    document.getElementById('surveyForm').onsubmit = async e => {
+      e.preventDefault();
+      const song_id = {{ song_id }
+    };
+    const data = {
+      reviewer: document.getElementById('reviewer').value,
+      rating: document.getElementById('rating').value,
+      comments: document.getElementById('comments').value
+    };
+    await fetch(`/submit_survey/${song_id}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    alert('🙏 Thank you for your feedback!');
+    e.target.reset();
+    };
+  </script>
+
+</body>
+
+</html>

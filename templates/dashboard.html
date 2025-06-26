@@ -118,7 +118,6 @@
           <th>Artist</th>
           <th>Avg. Rating</th>
           <th>Responses</th>
-          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -136,11 +135,8 @@
           <td>{{ song['responses'] }}</td>
           <td>
             <form method="post" action="{{ url_for('delete_song', song_id=song['id']) }}"
-                  onsubmit="return confirm('Delete “{{ song[\"title\"] }}” and all its reviews?');">
-              <button type="submit"
-                      style="background:#c0392b; color:#fff; padding:6px 12px; border:none; border-radius:4px; cursor:pointer;">
-                Delete
-              </button>
+                  onsubmit='return confirm("Delete \"{{ song.title }}\" and all its reviews?");'>
+              <button type="submit">Delete</button>
             </form>
           </td>
         </tr>

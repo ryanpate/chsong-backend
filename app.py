@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 from flask_cors import CORS
 import sqlite3
 import smtplib
@@ -97,6 +97,19 @@ def dashboard():
     """).fetchall()
     conn.close()
     return render_template('dashboard.html', songs=songs)
+
+
+# Delete song route
+@app.route('/delete_song/<int:song_id>', methods=['POST'])
+def delete_song(song_id):
+    conn = get_db_connection()
+    # Delete any survey responses for this song
+    conn.execute("DELETE FROM survey_responses WHERE song_id = ?", (song_id,))
+    # Delete the song itself
+    conn.execute("DELETE FROM songs WHERE id = ?", (song_id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('dashboard'))
 
 if __name__ == '__main__':
     app.run(debug=True)

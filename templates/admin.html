@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Admin Dashboard</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            border: 1px solid #ccc;
+        }
+
+        form {
+            display: inline;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Admin Dashboard</h1>
+    <h2>Manage Reviewers</h2>
+    <form method="post" action="{{ url_for('add_reviewer') }}">
+        <input name="name" placeholder="New reviewer name" required>
+        <button type="submit">Add</button>
+    </form>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Action</th>
+        </tr>
+        {% for rev in reviewers %}
+        <tr>
+            <td>{{ rev['name'] }}</td>
+            <td>
+                <form method="post" action="{{ url_for('delete_reviewer', rev_id=rev['id']) }}"
+                    onsubmit="return confirm('Remove {{ rev[\" name\"] }}?');">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Edit Songs</h2>
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Reason</th>
+            <th>Link</th>
+            <th>Action</th>
+        </tr>
+        {% for song in songs %}
+        <tr>
+            <form method="post" action="{{ url_for('update_song', song_id=song['id']) }}">
+                <td><input name="title" value="{{ song['title'] }}"></td>
+                <td><input name="artist" value="{{ song['artist'] }}"></td>
+                <td><input name="reason" value="{{ song['reason'] }}"></td>
+                <td><input name="link" value="{{ song['link'] }}"></td>
+                <td><button type="submit">Save</button></td>
+            </form>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+
+</html>

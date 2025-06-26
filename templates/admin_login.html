@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Admin Login</title>
+</head>
+
+<body>
+    {% with messages = get_flashed_messages(category_filter=["error"]) %}
+    {% if messages %}
+    <p style="color:red;">{{ messages[0] }}</p>
+    {% endif %}
+    {% endwith %}
+    <form method="post">
+        <label for="pin">Enter Admin PIN:</label>
+        <input id="pin" name="pin" type="password" required>
+        <button type="submit">Login</button>
+    </form>
+</body>
+
+</html>

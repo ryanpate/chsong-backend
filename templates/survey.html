@@ -147,7 +147,12 @@
     <p class="subtitle">Please rate and share your feedback on this song</p>
     <form id="surveyForm">
       <label for="reviewer">Your Name</label>
-      <input id="reviewer" type="text" required>
+      <select id="reviewer" required>
+        <option value="" disabled selected>Select your name</option>
+        {% for name in reviewers %}
+          <option value="{{ name }}">{{ name }}</option>
+        {% endfor %}
+      </select>
 
       <label for="rating">Rating (1–5)</label>
       <input id="rating" type="number" min="1" max="5" required>

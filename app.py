@@ -22,7 +22,7 @@ def send_notification(song_id, title, artist, link, reason):
     recipients = ['ryan@cherryhillsfamily.org','wcwa@cherryhillsfamily.org']
 
     # new for a Netlify-hosted front end
-    survey_link = f'https://chsong-backend.onrender.com/survey/{{song_id}}'
+    survey_link = f'https://chsong-backend.onrender.com/survey/{song_id}'
 
     html_content = f"""
     <h3>New Song Submission:</h3>

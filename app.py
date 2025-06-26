@@ -15,11 +15,11 @@ def get_db_connection():
 
 # EMAIL Notification Helper
 def send_notification(song_id, title, artist, link, reason):
-    smtp_server = 'smtp.example.com'
+    smtp_server = 'smtp.gmail.com'
     smtp_port = 587
-    sender = 'youremail@example.com'
-    password = 'yourpassword'
-    recipients = ['worshipteam@example.com']
+    sender = 'chnewsong@gmail.com'
+    password = 'bdixygrkrynjwjxb'
+    recipients = ['ryan@cherryhillsfamily.org','wcwa@cherryhillsfamily.org']
 
     survey_link = f'http://localhost:5000/survey/{song_id}'
 
@@ -65,7 +65,11 @@ def submit_song():
 
 @app.route('/survey/<int:song_id>', methods=['GET'])
 def survey(song_id):
-    return render_template('survey.html', song_id=song_id)
+    conn = get_db_connection()
+    song = conn.execute("SELECT title FROM songs WHERE id = ?", (song_id,)).fetchone()
+    conn.close()
+    song_title = song['title'] if song else 'Unknown Song'
+    return render_template('survey.html', song_id=song_id, song_title=song_title)
 
 @app.route('/submit_survey/<int:song_id>', methods=['POST'])
 def submit_survey(song_id):
@@ -77,6 +81,7 @@ def submit_survey(song_id):
         (song_id, data['reviewer'], data['rating'], data['comments'])
     )
     conn.commit()
+    song = conn.execute("SELECT title FROM songs WHERE id = ?", (song_id,)).fetchone()
     conn.close()
     return jsonify({'message': 'Survey submitted successfully'}), 200
 

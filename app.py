@@ -21,7 +21,8 @@ def send_notification(song_id, title, artist, link, reason):
     password = 'bdixygrkrynjwjxb'
     recipients = ['ryan@cherryhillsfamily.org','wcwa@cherryhillsfamily.org']
 
-    survey_link = f'http://localhost:5000/survey/{song_id}'
+    # new for a Netlify-hosted front end
+    survey_link = f'https://chnewsong.netlify.app/survey.html?song_id={song_id}'
 
     html_content = f"""
     <h3>New Song Submission:</h3>

@@ -147,7 +147,8 @@
         reason: document.getElementById('reason').value,
         link: document.getElementById('link').value
       };
-      await fetch('/submit_song', {
+      const API = 'https://chsong-backend.onrender.com';
+      await fetch('${API}/submit_song', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)

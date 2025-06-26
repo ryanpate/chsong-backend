@@ -136,7 +136,7 @@
       <nav>
         <ul>
           <li><a href="/">Home</a></li>
-          <li><a href="/dashboard">Dashboard</a></li>
+          <li><a href="https://chsong-backend.onrender.com/dashboard">Dashboard</a></li>
         </ul>
       </nav>
     </div>
@@ -174,7 +174,7 @@
     };
     const API = 'https://chsong-backend.onrender.com';
 
-    await fetch(`${API}/submit_survey/${song_id}`, {
+    await fetch(`/submit_survey/${song_id}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)

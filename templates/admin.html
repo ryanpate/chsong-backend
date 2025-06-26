@@ -39,7 +39,7 @@
             <td>{{ rev['name'] }}</td>
             <td>
                 <form method="post" action="{{ url_for('delete_reviewer', rev_id=rev['id']) }}"
-                    onsubmit="return confirm('Remove {{ rev[\" name\"] }}?');">
+                      onsubmit='return confirm("Remove {{ rev.name }}?");'>
                     <button type="submit">Delete</button>
                 </form>
             </td>

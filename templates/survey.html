@@ -157,7 +157,14 @@
       </select>
 
       <label for="rating">Rating (1–5)</label>
-      <input id="rating" type="number" min="1" max="5" required>
+      <select id="rating" required>
+        <option value="" disabled selected>Select rating</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
 
       <label for="comments">Comments</label>
       <textarea id="comments" rows="4"></textarea>

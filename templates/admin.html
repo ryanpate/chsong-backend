@@ -170,7 +170,13 @@
       <table>
         <thead>
           <tr>
-            <th>Title</th><th>Artist</th><th>Reason</th><th>Link</th><th>Save</th><th>Delete</th>
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Reason</th>
+            <th>Link</th>
+            <th>Comments</th>
+            <th>Save</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -181,10 +187,14 @@
               <td><input name="artist" value="{{ song['artist'] }}"></td>
               <td><input name="reason" value="{{ song['reason'] }}"></td>
               <td><input name="link" value="{{ song['link'] }}"></td>
-              <td>
-                <button type="submit">Save</button>
-              </td>
             </form>
+            <!-- Comments cell -->
+            <td>{{ song['comments'] if song.get('comments') else 'None' }}</td>
+            <td>
+              <form method="post" action="{{ url_for('update_song', song_id=song['id']) }}" class="inline">
+                <button type="submit">Save</button>
+              </form>
+            </td>
             <!-- Delete button cell -->
             <td>
               <form method="post" action="{{ url_for('delete_song', song_id=song['id']) }}" class="inline"

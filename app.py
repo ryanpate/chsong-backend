@@ -38,6 +38,11 @@ def init_db():
         ' id INTEGER PRIMARY KEY AUTOINCREMENT,'
         ' name TEXT UNIQUE NOT NULL)'
     )
+    # Ensure unique constraint on survey_responses (song_id, reviewer)
+    conn.execute(
+        'CREATE UNIQUE INDEX IF NOT EXISTS idx_song_reviewer '
+        'ON survey_responses(song_id, reviewer)'
+    )
     conn.commit()
     conn.close()
 
@@ -127,11 +132,23 @@ def survey(song_id):
 @app.route('/submit_survey/<int:song_id>', methods=['POST'])
 def submit_survey(song_id):
     data = request.json
+    reviewer = data.get('reviewer', '').strip()
+    if not reviewer:
+        return jsonify({'error': 'Reviewer name is required.'}), 400
     conn = get_db_connection()
+    # Check if this reviewer already submitted for this song
+    exists = conn.execute(
+        "SELECT 1 FROM survey_responses WHERE song_id = ? AND reviewer = ?",
+        (song_id, reviewer)
+    ).fetchone()
+    if exists:
+        conn.close()
+        return jsonify({'error': 'You have already submitted a review for this song.'}), 400
+    # Insert new response
     cursor = conn.cursor()
     cursor.execute(
         "INSERT INTO survey_responses (song_id, reviewer, rating, comments) VALUES (?, ?, ?, ?)",
-        (song_id, data['reviewer'], data['rating'], data['comments'])
+        (song_id, reviewer, data.get('rating'), data.get('comments'))
     )
     conn.commit()
     conn.close()
@@ -142,11 +159,12 @@ def submit_survey(song_id):
 def dashboard():
     conn = get_db_connection()
     songs = conn.execute("""
-        SELECT songs.*, 
-               AVG(survey_responses.rating) AS avg_rating, 
-               COUNT(survey_responses.id) AS responses
+        SELECT songs.*,
+               AVG(survey_responses.rating) AS avg_rating,
+               COUNT(survey_responses.id) AS responses,
+               GROUP_CONCAT(survey_responses.comments, ' | ') AS comments
         FROM songs
-        LEFT JOIN survey_responses 
+        LEFT JOIN survey_responses
           ON songs.id = survey_responses.song_id
         GROUP BY songs.id
     """).fetchall()

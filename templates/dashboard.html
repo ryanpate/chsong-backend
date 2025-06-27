@@ -119,6 +119,7 @@
           <th>Artist</th>
           <th>Avg. Rating</th>
           <th>Responses</th>
+          <th>Comments</th>
         </tr>
       </thead>
       <tbody>
@@ -134,6 +135,7 @@
             {% endif %}
           </td>
           <td>{{ song['responses'] }}</td>
+          <td>{{ song['comments'] if song['comments'] else 'None' }}</td>
         </tr>
         {% endfor %}
       </tbody>

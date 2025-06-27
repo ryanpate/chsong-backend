@@ -145,6 +145,7 @@
   <main class="container">
     <h2>Review: {{ song_title }}</h2>
     <p class="subtitle">Please rate and share your feedback on this song</p>
+    <div id="errorMessage" style="color: #c0392b; margin-bottom: 20px;"></div>
     <form id="surveyForm">
       <label for="reviewer">Your Name</label>
       <select id="reviewer" required>
@@ -171,21 +172,30 @@
   <script>
     document.getElementById('surveyForm').onsubmit = async e => {
       e.preventDefault();
-      const song_id = {{ song_id }};
-    const data = {
-      reviewer: document.getElementById('reviewer').value,
-      rating: document.getElementById('rating').value,
-      comments: document.getElementById('comments').value
-    };
-    const API = 'https://chsong-backend.onrender.com';
+      const errorDiv = document.getElementById('errorMessage');
+      errorDiv.textContent = '';  // clear previous errors
 
-    await fetch(`/submit_survey/${song_id}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
-    alert('🙏 Thank you for your feedback!');
-    e.target.reset();
+      const song_id = {{ song_id }};
+      const data = {
+        reviewer: document.getElementById('reviewer').value,
+        rating: document.getElementById('rating').value,
+        comments: document.getElementById('comments').value
+      };
+
+      const response = await fetch(`/submit_survey/${song_id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+      if (!response.ok) {
+        // Display error message
+        errorDiv.textContent = result.error || 'Error submitting review.';
+      } else {
+        alert('🙏 Thank you for your feedback!');
+        e.target.reset();
+      }
     };
   </script>
 

@@ -156,12 +156,19 @@ def dashboard():
 
 @app.route('/delete_song/<int:song_id>', methods=['POST'])
 def delete_song(song_id):
-    conn = get_db_connection()
-    conn.execute("DELETE FROM survey_responses WHERE song_id = ?", (song_id,))
-    conn.execute("DELETE FROM songs WHERE id = ?", (song_id,))
-    conn.commit()
-    conn.close()
-    return redirect(url_for('dashboard'))
+    logging.info(f"Attempting to delete song with ID {song_id}")
+    try:
+        conn = get_db_connection()
+        conn.execute("DELETE FROM survey_responses WHERE song_id = ?", (song_id,))
+        conn.execute("DELETE FROM songs WHERE id = ?", (song_id,))
+        conn.commit()
+        conn.close()
+        logging.info(f"Successfully deleted song with ID {song_id}")
+    except Exception as e:
+        logging.error(f"Error deleting song with ID {song_id}", exc_info=e)
+        flash("There was an error deleting the song.", "error")
+    # Redirect back to the admin dashboard
+    return redirect(url_for('admin_dashboard'))
 
 # --- ADMIN INTERFACE BELOW ---
 

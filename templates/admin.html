@@ -189,7 +189,7 @@
               <td><input name="link" value="{{ song['link'] }}"></td>
             </form>
             <!-- Comments cell -->
-            <td>{{ song['comments'] if song.get('comments') else 'None' }}</td>
+            <td>{{ song['comments'] or 'None' }}</td>
             <td>
               <form method="post" action="{{ url_for('update_song', song_id=song['id']) }}" class="inline">
                 <button type="submit">Save</button>

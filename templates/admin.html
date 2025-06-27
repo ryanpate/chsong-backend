@@ -170,7 +170,7 @@
       <table>
         <thead>
           <tr>
-            <th>Title</th><th>Artist</th><th>Reason</th><th>Link</th>
+            <th>Title</th><th>Artist</th><th>Reason</th><th>Link</th><th>Save</th><th>Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -185,6 +185,13 @@
                 <button type="submit">Save</button>
               </td>
             </form>
+            <!-- Delete button cell -->
+            <td>
+              <form method="post" action="{{ url_for('delete_song', song_id=song['id']) }}" class="inline"
+                    onsubmit='return confirm("Delete song \'{{ song.title }}\' and all its reviews?");'>
+                <button type="submit">Delete</button>
+              </form>
+            </td>
           </tr>
           {% endfor %}
         </tbody>

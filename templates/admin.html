@@ -143,17 +143,19 @@
     <section>
       <h2>Manage Reviewers</h2>
       <form method="post" action="{{ url_for('add_reviewer') }}" class="inline">
-        <input name="name" placeholder="New reviewer name" required>
+        <input name="name" placeholder="Name" required>
+        <input name="email" placeholder="Email" type="email" required>
         <input type="submit" value="Add">
       </form>
       <table>
         <thead>
-          <tr><th>Name</th><th>Action</th></tr>
+          <tr><th>Name</th><th>Email</th><th>Action</th></tr>
         </thead>
         <tbody>
           {% for rev in reviewers %}
           <tr>
             <td>{{ rev['name'] }}</td>
+            <td>{{ rev['email'] or 'None' }}</td>
             <td>
               <form method="post" action="{{ url_for('delete_reviewer', rev_id=rev['id']) }}" class="inline"
                     onsubmit='return confirm("Remove {{ rev.name }}?");'>

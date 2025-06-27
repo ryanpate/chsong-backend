@@ -1,73 +1,198 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Admin Dashboard</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            padding: 8px;
-            border: 1px solid #ccc;
-        }
-
-        form {
-            display: inline;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #006838;
+      --secondary: #333;
+      --bg: #f8f99;
+      --font: 'Open Sans', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--secondary);
+    }
+    header {
+      background: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    header .container {
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+    }
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--secondary);
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    nav a:hover {
+      background: rgba(0,104,56,0.1);
+      color: var(--primary);
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    h1, h2 {
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 40px;
+    }
+    th, td {
+      padding: 12px 8px;
+      border-bottom: 1px solid #eee;
+    }
+    th {
+      background: #fff;
+      border-bottom: 2px solid #ccc;
+      text-align: left;
+    }
+    td {
+      text-align: center;
+    }
+    td:first-child, th:first-child {
+      text-align: left;
+    }
+    form.inline { display: inline; }
+    button, input[type="submit"] {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    button:hover, input[type="submit"]:hover {
+      background: #00552e;
+    }
+    input, select {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    footer {
+      text-align: center;
+      padding: 15px 0;
+      background: #fff;
+      color: #777;
+      font-size: 0.875rem;
+      margin-top: 40px;
+    }
+  </style>
 </head>
-
 <body>
+
+  <header>
+    <div class="container">
+      <a href="/" class="logo">Cherry Hills Worship</a>
+      <nav>
+        <ul>
+          <li><a href="/">Submit Song</a></li>
+          <li><a href="/dashboard">Dashboard</a></li>
+          <li><a href="/admin">Admin</a></li>
+          <li><a href="/admin/login">Login</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
     <h1>Admin Dashboard</h1>
-    <h2>Manage Reviewers</h2>
-    <form method="post" action="{{ url_for('add_reviewer') }}">
+
+    <section>
+      <h2>Manage Reviewers</h2>
+      <form method="post" action="{{ url_for('add_reviewer') }}" class="inline">
         <input name="name" placeholder="New reviewer name" required>
-        <button type="submit">Add</button>
-    </form>
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Action</th>
-        </tr>
-        {% for rev in reviewers %}
-        <tr>
+        <input type="submit" value="Add">
+      </form>
+      <table>
+        <thead>
+          <tr><th>Name</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          {% for rev in reviewers %}
+          <tr>
             <td>{{ rev['name'] }}</td>
             <td>
-                <form method="post" action="{{ url_for('delete_reviewer', rev_id=rev['id']) }}"
-                      onsubmit='return confirm("Remove {{ rev.name }}?");'>
-                    <button type="submit">Delete</button>
-                </form>
+              <form method="post" action="{{ url_for('delete_reviewer', rev_id=rev['id']) }}" class="inline"
+                    onsubmit='return confirm("Remove {{ rev.name }}?");'>
+                <button type="submit">Delete</button>
+              </form>
             </td>
-        </tr>
-        {% endfor %}
-    </table>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
 
-    <h2>Edit Songs</h2>
-    <table>
-        <tr>
-            <th>Title</th>
-            <th>Artist</th>
-            <th>Reason</th>
-            <th>Link</th>
-            <th>Action</th>
-        </tr>
-        {% for song in songs %}
-        <tr>
-            <form method="post" action="{{ url_for('update_song', song_id=song['id']) }}">
-                <td><input name="title" value="{{ song['title'] }}"></td>
-                <td><input name="artist" value="{{ song['artist'] }}"></td>
-                <td><input name="reason" value="{{ song['reason'] }}"></td>
-                <td><input name="link" value="{{ song['link'] }}"></td>
-                <td><button type="submit">Save</button></td>
+    <section>
+      <h2>Edit Songs</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th><th>Artist</th><th>Reason</th><th>Link</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for song in songs %}
+          <tr>
+            <form method="post" action="{{ url_for('update_song', song_id=song['id']) }}" class="inline">
+              <td><input name="title" value="{{ song['title'] }}"></td>
+              <td><input name="artist" value="{{ song['artist'] }}"></td>
+              <td><input name="reason" value="{{ song['reason'] }}"></td>
+              <td><input name="link" value="{{ song['link'] }}"></td>
+              <td><button type="submit">Save</button></td>
             </form>
-        </tr>
-        {% endfor %}
-    </table>
-</body>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  </main>
 
+  <footer>
+    &copy; 2025 Cherry Hills Worship Team
+  </footer>
+
+</body>
 </html>

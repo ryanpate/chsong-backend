@@ -1,22 +1,148 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Admin Login</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #006838;
+      --secondary: #333;
+      --bg: #f8f99;
+      --font: 'Open Sans', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--secondary);
+    }
+    header {
+      background: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    header .container {
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+    }
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--secondary);
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    nav a:hover {
+      background: rgba(0,104,56,0.1);
+      color: var(--primary);
+    }
+    .container {
+      max-width: 700px;
+      margin: 60px auto;
+      padding: 0 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h2 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    form label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      font-size: 1rem;
+    }
+    button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+    }
+    button:hover {
+      background: #00552e;
+    }
+    .flash {
+      color: #c0392b;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    footer {
+      text-align: center;
+      padding: 15px 0;
+      background: #fff;
+      color: #777;
+      font-size: 0.875rem;
+      margin-top: 40px;
+    }
+  </style>
 </head>
-
 <body>
+
+  <header>
+    <div class="container">
+      <a href="/" class="logo">Cherry Hills Worship</a>
+      <nav>
+        <ul>
+          <li><a href="/">Submit Song</a></li>
+          <li><a href="/dashboard">Dashboard</a></li>
+          <li><a href="/admin">Admin</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h2>Admin Login</h2>
     {% with messages = get_flashed_messages(category_filter=["error"]) %}
-    {% if messages %}
-    <p style="color:red;">{{ messages[0] }}</p>
-    {% endif %}
+      {% if messages %}
+        <div class="flash">{{ messages[0] }}</div>
+      {% endif %}
     {% endwith %}
     <form method="post">
-        <label for="pin">Enter Admin PIN:</label>
-        <input id="pin" name="pin" type="password" required>
-        <button type="submit">Login</button>
+      <label for="pin">Enter Admin PIN</label>
+      <input id="pin" name="pin" type="password" required>
+      <button type="submit">Login</button>
     </form>
-</body>
+  </main>
 
+  <footer>
+    &copy; 2025 Cherry Hills Worship Team
+  </footer>
+
+</body>
 </html>

@@ -170,27 +170,21 @@
       <table>
         <thead>
           <tr>
-            <th>Title</th><th>Artist</th><th>Reason</th><th>Link</th><th>Save</th><th>Delete</th>
+            <th>Title</th><th>Artist</th><th>Reason</th><th>Link</th>
           </tr>
         </thead>
         <tbody>
           {% for song in songs %}
           <tr>
-            <!-- Update form wraps the first five cells (title, artist, reason, link, Save) -->
             <form method="post" action="{{ url_for('update_song', song_id=song['id']) }}" class="inline">
               <td><input name="title" value="{{ song['title'] }}"></td>
               <td><input name="artist" value="{{ song['artist'] }}"></td>
               <td><input name="reason" value="{{ song['reason'] }}"></td>
               <td><input name="link" value="{{ song['link'] }}"></td>
-              <td><button type="submit">Save</button></td>
+              <td>
+                <button type="submit">Save</button>
+              </td>
             </form>
-            <!-- Delete form in its own cell -->
-            <td>
-              <form method="post" action="{{ url_for('delete_song', song_id=song['id']) }}" class="inline"
-                    onsubmit='return confirm("Delete song \'{{ song['title'] }}\' and all its reviews?");'>
-                <button type="submit">Delete</button>
-              </form>
-            </td>
           </tr>
           {% endfor %}
         </tbody>

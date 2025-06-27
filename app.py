@@ -43,6 +43,11 @@ def init_db():
         'CREATE UNIQUE INDEX IF NOT EXISTS idx_song_reviewer '
         'ON survey_responses(song_id, reviewer)'
     )
+    # Ensure 'email' column exists
+    try:
+        conn.execute("ALTER TABLE reviewers ADD COLUMN email TEXT")
+    except sqlite3.OperationalError:
+        pass  # column already exists
     conn.commit()
     conn.close()
 
@@ -208,7 +213,7 @@ def admin_dashboard():
     conn = get_db_connection()
     songs = conn.execute("SELECT * FROM songs").fetchall()
     reviewers = conn.execute(
-        "SELECT * FROM reviewers ORDER BY name").fetchall()
+        "SELECT id, name, email FROM reviewers ORDER BY name").fetchall()
     conn.close()
     return render_template('admin.html', songs=songs, reviewers=reviewers)
 
@@ -218,10 +223,13 @@ def add_reviewer():
     if not session.get('admin'):
         return redirect(url_for('admin_login'))
     name = request.form.get('name', '').strip()
-    if name:
+    email = request.form.get('email', '').strip()
+    if name and email:
         conn = get_db_connection()
         conn.execute(
-            "INSERT OR IGNORE INTO reviewers (name) VALUES (?)", (name,))
+            "INSERT OR IGNORE INTO reviewers (name, email) VALUES (?, ?)",
+            (name, email)
+        )
         conn.commit()
         conn.close()
     return redirect(url_for('admin_dashboard'))
